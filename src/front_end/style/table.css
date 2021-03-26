@@ -1,0 +1,16 @@
+table,
+td,
+th {
+  border-collapse: collapse;
+  width: 50%;
+  margin: auto;
+}
+
+th {
+  font-size: 20px;
+  border-bottom: 1px solid black;
+}
+
+.TableDiv {
+  height: 500px;
+}

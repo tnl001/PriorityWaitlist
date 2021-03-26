@@ -1,0 +1,14 @@
+.Button {
+  width: 24%;
+  height: 70%;
+  background-color: white;
+  border-radius: 3px;
+  border-color: black;
+  color: black;
+}
+
+.Button:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}

@@ -1,0 +1,7 @@
+.DataInput {
+  display: flex;
+  width: 50%;
+  height: 50px;
+  margin: auto;
+  justify-content: space-between;
+}
