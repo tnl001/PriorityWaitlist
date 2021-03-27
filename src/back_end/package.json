@@ -1,0 +1,23 @@
+{
+  "name": "back_end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tnl001/PriorityWaitlist.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tnl001/PriorityWaitlist/issues"
+  },
+  "homepage": "https://github.com/tnl001/PriorityWaitlist#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "uuid": "^8.3.2"
+  }
+}

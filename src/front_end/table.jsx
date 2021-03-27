@@ -7,8 +7,8 @@ const Table = (props) => {
 
     for (let i = 0; i < props.readdata.length; i++) {
         data[i] = props.readdata[i];
-        console.log(data[i]);
     }
+
 
     return ( 
         <table>
