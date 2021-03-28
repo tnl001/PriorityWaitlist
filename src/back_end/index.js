@@ -76,6 +76,8 @@ app.get('/api', (req, res) => {
             console.log(err);
         } else {
             console.log('Add Status: Success!');
+            
+            async.waterfall([getData], (err, res) => { console.log(err); });
         }
     });
     console.log('Insert pending: ');
@@ -88,14 +90,18 @@ app.get('/api', (req, res) => {
  * DELETE request to /api
  */
 app.delete('/api', (req, res) => {
-    connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist");`, (err, res) => {
+    connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist") RETURNING *;`, (err, res) => {
         if (err) {
             console.log(err);
         } else {
-            console.log('Delete Status: 1 entry - Success!');
+            async.waterfall([getData], (err, res) => { console.log(err); });
+            console.log(`Delete Status: ${res.rowCount} entry(s) - Success!`);
+            console.log(res.rows);
+            
         }
     });
 
+    
     res.status(200).send('Delete Success');
     
 })

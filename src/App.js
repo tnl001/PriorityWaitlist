@@ -59,9 +59,12 @@ function App(props) {
           },
           body: JSON.stringify({"id": uuid(), "name": nameIn, "priority": priorityIn})
         }).then(res => {
-          // fetchData().then(guest => {
-          //   changeData(guest);
-          // })
+          // After making the POST request, fetch the data from server again
+          // Now that we have the newly changed data, we change the state of our
+          // old data to the new one and render it
+          fetchData().then(guest => {
+            changeData(guest);
+          });
           return res;
         }).catch(err => {
           console.log(err);
@@ -85,6 +88,11 @@ function App(props) {
     fetch(API, {
       method: 'DELETE'
     }).then(res => {
+      // After making the DELETE request, fetch the newly changed data
+      // and render it.
+      fetchData().then(guest => {
+        changeData(guest);
+      });
       return res;
     }).catch(err => {
       console.log(err);
@@ -102,8 +110,8 @@ function App(props) {
       
       
       <div className="DataInput">
-        <Input id="nameInput" holder="Enter Name Here" />
-        <Input id="priorityInput" holder="Enter Priority Here" />
+        <Input id="nameInput" holder="Enter Name Here" type="text" />
+        <Input id="priorityInput" holder="Enter Priority Here" type="number" />
         <Button content="Add New Guest" onclick={infoCollect} />
         <Button content="Pop Guest" onclick={popGuest} />
       </div>
