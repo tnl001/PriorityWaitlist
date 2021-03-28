@@ -8,12 +8,12 @@ import './App.css';
 
 
 
-
+const API = "http://localhost:5555/api/";
 
 
 // Function that will fetch data
 const fetchData = async() => {
-  const res = await fetch("http://localhost:5555/");
+  const res = await fetch(API);
   const dataJSON = await res.json();
   return dataJSON;
 }
@@ -36,11 +36,13 @@ function App(props) {
 
   console.log(data);
 
-  // Handling inputs
+  /**
+   * Handling inputs (add method)
+   */
   const infoCollect = () => {
     // Collect info
     nameIn = document.getElementById("nameInput").value;
-    priorityIn = document.getElementById("priorityInput").value;
+    priorityIn = parseInt(document.getElementById("priorityInput").value);
 
     if (nameIn === "" || priorityIn === "") {
         console.log("Fields cannot be empty!");
@@ -50,15 +52,44 @@ function App(props) {
         document.getElementById("priorityInput").value = "";
 
         // Handling data
-        let dataTemp = [];
-        dataTemp = [...data, {"id": uuid(), "name": nameIn, "priority": priorityIn}];
-        changeData(dataTemp);
+        fetch(API, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({"id": uuid(), "name": nameIn, "priority": priorityIn})
+        }).then(res => {
+          // fetchData().then(guest => {
+          //   changeData(guest);
+          // })
+          return res;
+        }).catch(err => {
+          console.log(err);
+        })
+
+        // let dataTemp = [];
+        // dataTemp = [...data, {"id": uuid(), "name": nameIn, "priority": priorityIn}];
+        // changeData(dataTemp);
+       
 
         console.log(nameIn + ", " + priorityIn);
     }
     
   }
 
+  /**
+   * Pop method
+   */
+  const popGuest = () => {
+    // Find the max priority value among the guest
+    fetch(API, {
+      method: 'DELETE'
+    }).then(res => {
+      return res;
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   return (
     <div className="App">
@@ -74,7 +105,7 @@ function App(props) {
         <Input id="nameInput" holder="Enter Name Here" />
         <Input id="priorityInput" holder="Enter Priority Here" />
         <Button content="Add New Guest" onclick={infoCollect} />
-        <Button content="Pop Guest" />
+        <Button content="Pop Guest" onclick={popGuest} />
       </div>
 
     </div>

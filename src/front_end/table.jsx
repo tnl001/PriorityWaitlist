@@ -21,7 +21,7 @@ const Table = (props) => {
             
             <tbody>
                 {data.map((guest) => (
-                    <tr key={guest.id}>
+                    <tr key={guest.uuid}>
                         <td>{guest.name}</td>
                         <td>{guest.priority}</td>
                     </tr>

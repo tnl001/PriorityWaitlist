@@ -2,31 +2,105 @@
 const path = require('path');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+const pg = require('pg');
+const async = require('async');
 
 // Create an express app
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+
 // Server's hostname and port
 const hostname = '0.0.0.0';
 const port = process.env.PORT || 5555;
 
+
+// Steps to connect the server to the database
+let database;
+const databaseURL = "postgres://postgres:tai1234@localhost:5432/postgres";
+const connectClient = new pg.Client(databaseURL);
+connectClient.connect();
+
+
+/**
+ * This function queries the database from postgres
+ * Use the query function from Postgres Client Object
+ * 
+ * PARAMETER: None
+ * RETURN: Void
+ */
+function getData() {
+    connectClient.query(`SELECT * FROM "PriorityWaitlist";`, (error, result) => {
+        if (error) {
+            console.log(error);
+        } else {
+            database = result.rows;
+        }
+    });
+}
+
+// Load the data
+async.waterfall([getData], (err, res) => { console.log(err); });
+
+
+// This will fix the CORS policy things
 app.use(cors());
 
-
+// Setting the view. We don't need this yet so don't worry about it
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 /**
- * GET request to root and assign the queried database
+ * GET request to /api and assign the queried database
  */
-app.get('/', (req, res) => {
-    res.status(200).json([
-        {"id": uuidv4(), "name": "Tai", "priority": 18},
-        {"id": uuidv4(), "name": "Tai", "priority": 26}
-    ]);
+app.get('/api', (req, res) => {
+    res.status(200).json(
+        database
+    );
 });
     
+/**
+ * POST request to /api
+ */
+ app.post('/api', (req, res) => {
+    const data = req.body;
+    const id = data.id;
+    const name = data.name;
+    const priority = data.priority;
+
+    connectClient.query(`INSERT INTO "PriorityWaitlist" (uuid, name, priority) VALUES ($1, $2, $3);`, [id, name, priority], (err, res) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Add Status: Success!');
+        }
+    });
+    console.log('Insert pending: ');
+    console.log(data);
+    res.status(200).send(req.body);
+    
+});
+
+/**
+ * DELETE request to /api
+ */
+app.delete('/api', (req, res) => {
+    connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist");`, (err, res) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Delete Status: 1 entry - Success!');
+        }
+    });
+
+    res.status(200).send('Delete Success');
+    
+})
+
+
 /**
  * Port listen
  */
