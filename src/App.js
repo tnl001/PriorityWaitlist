@@ -5,6 +5,7 @@ import Table from './front_end/table.jsx';
 import Input from './front_end/input.jsx';
 import './data.css';
 import './App.css';
+import Modal from './front_end/modal.jsx';
 
 
 
@@ -25,7 +26,7 @@ function App(props) {
 
 
   let [data, changeData] = useState([]);
-
+  let [modalVis, changeVis] = useState(false);
 
   // Fetch data at the beginning when the component did mount
   useEffect(() => {
@@ -93,7 +94,10 @@ function App(props) {
       fetchData().then(guest => {
         changeData(guest);
       });
+      console.log(res.body);
       return res;
+    }).then(data => {
+      console.log(data);
     }).catch(err => {
       console.log(err);
     })
@@ -113,7 +117,17 @@ function App(props) {
         <Input id="nameInput" holder="Enter Name Here" type="text" />
         <Input id="priorityInput" holder="Enter Priority Here" type="number" />
         <Button content="Add New Guest" onclick={infoCollect} />
-        <Button content="Pop Guest" onclick={popGuest} />
+        <Button content="Pop Guest" onclick={() => {
+          popGuest();
+          changeVis(!modalVis);
+          }} 
+        />
+        
+        
+      </div>
+
+      <div>
+          <Modal state={modalVis} />
       </div>
 
     </div>

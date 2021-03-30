@@ -42,6 +42,25 @@ function getData() {
     });
 }
 
+
+function getDeleted() {
+    let resData = [];
+    connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist") RETURNING *;`, (err, res) => {
+        if (err) {
+            console.log(err);
+        } else {
+            async.waterfall([getData], (err, res) => { console.log(err); });
+            console.log(`Delete Status: ${res.rowCount} entry(s) - Success!`);
+            resData = res.rows;
+            console.log(res.rows);     
+        }
+    });
+
+    return resData;
+
+}
+
+
 // Load the data
 async.waterfall([getData], (err, res) => { console.log(err); });
 
@@ -89,20 +108,38 @@ app.get('/api', (req, res) => {
 /**
  * DELETE request to /api
  */
+
 app.delete('/api', (req, res) => {
-    connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist") RETURNING *;`, (err, res) => {
-        if (err) {
-            console.log(err);
-        } else {
-            async.waterfall([getData], (err, res) => { console.log(err); });
-            console.log(`Delete Status: ${res.rowCount} entry(s) - Success!`);
-            console.log(res.rows);
+    let resData = [];
+    
+    
+    async.waterfall( [
+        function(callback) {
             
+            connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist") RETURNING *;`, (err, res) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    async.waterfall([getData], (err, res) => { console.log(err); });
+                    console.log(`Delete Status: ${res.rowCount} entry(s) - Success!`);
+                    resData = res.rows;
+                    console.log(resData);  
+                    callback();
+                    // console.log(res.rows);     
+                }
+            });
+            
+        },
+
+        function(callback) {
+            res.status(200).send(resData);
+            // callback();
         }
+    ], (err, res) => { 
+        console.log(err); 
     });
 
     
-    res.status(200).send('Delete Success');
     
 })
 
