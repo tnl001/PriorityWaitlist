@@ -12,5 +12,8 @@ th {
 }
 
 .TableDiv {
+  width: 50%;
   height: 500px;
+  /* background-color: green; */
+  margin: auto;
 }

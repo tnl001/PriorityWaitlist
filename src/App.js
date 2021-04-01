@@ -5,7 +5,9 @@ import Table from './front_end/table.jsx';
 import Input from './front_end/input.jsx';
 import './data.css';
 import './App.css';
+import './front_end/style/modal.css';
 import Modal from './front_end/modal.jsx';
+import CloseButton from './front_end/clsbtn.jsx';
 
 
 
@@ -27,6 +29,7 @@ function App(props) {
 
   let [data, changeData] = useState([]);
   let [modalVis, changeVis] = useState(false);
+  let [modalContent, changeContent] = useState([]);
 
   // Fetch data at the beginning when the component did mount
   useEffect(() => {
@@ -35,7 +38,6 @@ function App(props) {
     })
   }, []);
 
-  console.log(data);
 
   /**
    * Handling inputs (add method)
@@ -94,13 +96,15 @@ function App(props) {
       fetchData().then(guest => {
         changeData(guest);
       });
-      console.log(res.body);
-      return res;
+      return res.json();
     }).then(data => {
+      changeVis(true);
+      changeContent(data);
       console.log(data);
     }).catch(err => {
       console.log(err);
-    })
+    });
+    return true
   }
 
   return (
@@ -119,16 +123,30 @@ function App(props) {
         <Button content="Add New Guest" onclick={infoCollect} />
         <Button content="Pop Guest" onclick={() => {
           popGuest();
-          changeVis(!modalVis);
+          changeVis(true);
           }} 
         />
         
         
       </div>
 
-      <div>
-          <Modal state={modalVis} />
-      </div>
+      {(modalVis === false) ? (null) : <div className="Wrapper">
+      
+          <div className="Modal-Wd">
+            <div className="InnerModal-Wd">
+              <Modal state={modalVis} content={modalContent} />
+            </div>
+            
+            <div className="CloseBtnWrapper">
+              <div className="CloseBtn">
+                <CloseButton content="Done" onclick={() => {
+                  changeVis(false);
+                }} />
+              </div>
+            </div>
+              
+          </div>
+        </div>}
 
     </div>
   );
