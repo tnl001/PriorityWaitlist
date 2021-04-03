@@ -25,11 +25,12 @@ function App(props) {
 
   let nameIn;
   let priorityIn;
-
+  let clearCount = 0;
 
   let [data, changeData] = useState([]);
   let [modalVis, changeVis] = useState(false);
   let [modalContent, changeContent] = useState([]);
+  let [btnDisable, changeDisable] = useState(true);
 
   // Fetch data at the beginning when the component did mount
   useEffect(() => {
@@ -98,17 +99,40 @@ function App(props) {
       });
       return res.json();
     }).then(data => {
-      changeVis(true);
+      // changeVis(true);
       changeContent(data);
+
+      console.log("inside pop: " + data.length);
+
+      // Check if there's anything to pop
+      if (data.length === 0) {
+        changeVis(false);
+        console.log('nothing to pop...');
+      } else {
+        changeVis(true);
+      }
       console.log(data);
+
+      return data;
+
     }).catch(err => {
       console.log(err);
     });
-    return true
+    
+  }
+
+
+  // Keep track of the amount of cleared items
+  const incClearCount = () => {
+    document.getElementById('clear-count').textContent = ++clearCount;
+    console.log('count incremented');
   }
 
   return (
     <div className="App">
+      <div>
+              <p id="clear-count">{clearCount}</p>  
+      </div>   
       <h1>Waitlist</h1>
       <div className="TableDiv">
 
@@ -116,34 +140,57 @@ function App(props) {
         
       </div>
       
-      
+      <div className="Filler">
+          
+      </div>
       <div className="DataInput">
+        
         <Input id="nameInput" holder="Enter Name Here" type="text" />
         <Input id="priorityInput" holder="Enter Priority Here" type="number" />
         <Button content="Add New Guest" onclick={infoCollect} />
         <Button content="Pop Guest" onclick={() => {
-          popGuest();
-          changeVis(true);
+          popGuest();   
           }} 
+          
         />
         
         
       </div>
 
+      {console.log(modalVis)}
+
       {(modalVis === false) ? (null) : <div className="Wrapper">
-      
+
+          
+          {/* The 3 lines below are just for debugging */}
+          {/* {console.log("modal length: " + modalContent.length)}
+          {console.log("count: " + document.getElementById('clear-count').textContent)} */}
+          {/* {(parseInt(document.getElementById('clear-count').textContent) === modalContent.length) ? console.log('reached') : console.log('not yet')} */}
+
           <div className="Modal-Wd">
             <div className="InnerModal-Wd">
-              <Modal state={modalVis} content={modalContent} />
+              <Modal state={modalVis} content={modalContent} clearDetect={incClearCount} />
             </div>
-            
+
+      
             <div className="CloseBtnWrapper">
               <div className="CloseBtn">
-                <CloseButton content="Done" onclick={() => {
+                <CloseButton 
+                content="Done" 
+                onclick={() => {
                   changeVis(false);
-                }} />
+                }} 
+                disable="true"
+
+                />
+                {/* {(parseInt(document.getElementById('clear-count').textContent) === modalContent.length) ? (
+                  (document.getElementById('cls-btn').style.opacity = 1) &&
+                  (document.getElementById('cls-btn').style.pointerEvents = "auto")
+                ) : console.log('not yet')} */}
               </div>
             </div>
+
+            
               
           </div>
         </div>}
