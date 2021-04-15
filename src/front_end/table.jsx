@@ -9,7 +9,6 @@ const Table = (props) => {
         data[i] = props.readdata[i];
     }
 
-
     return ( 
         <table>
             <thead>

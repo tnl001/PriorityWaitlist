@@ -4,24 +4,6 @@ import "./style/modal.css";
 const Modal = (props) => {
   let data = [];
   let content;
-  //let [content, changeContent] = useState(null);
-
-  // let initialState = props.state;
-  // let [state, changeState] = useState(true);
-  
-
-  // console.log("Initial State: " + initialState);
-
-  // const closeState = () => {
-  //   changeState(false);
-  // }
-
-
-  
-
-
-
-
 
   /**
    * This function sets style for data card upon getting clicked
@@ -47,9 +29,6 @@ const Modal = (props) => {
     }
   }
 
-
-  
-
   if (props.state === false) {
     content = null;
   } else {
@@ -58,7 +37,6 @@ const Modal = (props) => {
     }
 
     content = (
-
         <div>
           <div className="Title">
             <h2>Coming up next</h2>
@@ -73,19 +51,11 @@ const Modal = (props) => {
               ))
             }
 
-            {/* {(parseInt(document.getElementById('clear-count').textContent) === props.content.length) ? (document.getElementById('cls-btn').style.opacity=1) : console.log('not yet')} */}
-          </div>
-          
-          
+          </div>  
         </div>
-
-      
     );
   }
 
-  
-
-  // return <div>{(state === false) ? (content = null) : content}</div>;
   return <div>{content}</div>
 };
 

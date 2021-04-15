@@ -43,24 +43,6 @@ function getData() {
 }
 
 
-function getDeleted() {
-    let resData = [];
-    connectClient.query(`DELETE FROM "PriorityWaitlist" WHERE priority = (SELECT MAX(priority) FROM "PriorityWaitlist") RETURNING *;`, (err, res) => {
-        if (err) {
-            console.log(err);
-        } else {
-            async.waterfall([getData], (err, res) => { console.log(err); });
-            console.log(`Delete Status: ${res.rowCount} entry(s) - Success!`);
-            resData = res.rows;
-            console.log(res.rows);     
-        }
-    });
-
-    return resData;
-
-}
-
-
 // Load the data
 async.waterfall([getData], (err, res) => { console.log(err); });
 
@@ -95,7 +77,6 @@ app.get('/api', (req, res) => {
             console.log(err);
         } else {
             console.log('Add Status: Success!');
-            
             async.waterfall([getData], (err, res) => { console.log(err); });
         }
     });
@@ -111,8 +92,7 @@ app.get('/api', (req, res) => {
 
 app.delete('/api', (req, res) => {
     let resData = [];
-    
-    
+       
     async.waterfall( [
         function(callback) {
             
@@ -137,10 +117,7 @@ app.delete('/api', (req, res) => {
         }
     ], (err, res) => { 
         console.log(err); 
-    });
-
-    
-    
+    }); 
 })
 
 

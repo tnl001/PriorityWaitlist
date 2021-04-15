@@ -21,7 +21,7 @@ const fetchData = async() => {
   return dataJSON;
 }
 
-function App(props) {
+function App() {
 
   let nameIn;
   let priorityIn;
@@ -30,7 +30,6 @@ function App(props) {
   let [data, changeData] = useState([]);
   let [modalVis, changeVis] = useState(false);
   let [modalContent, changeContent] = useState([]);
-  let [btnDisable, changeDisable] = useState(true);
 
   // Fetch data at the beginning when the component did mount
   useEffect(() => {
@@ -73,11 +72,6 @@ function App(props) {
         }).catch(err => {
           console.log(err);
         })
-
-        // let dataTemp = [];
-        // dataTemp = [...data, {"id": uuid(), "name": nameIn, "priority": priorityIn}];
-        // changeData(dataTemp);
-       
 
         console.log(nameIn + ", " + priorityIn);
     }
@@ -153,19 +147,11 @@ function App(props) {
           }} 
           
         />
-        
-        
       </div>
 
       {console.log(modalVis)}
 
       {(modalVis === false) ? (null) : <div className="Wrapper">
-
-          
-          {/* The 3 lines below are just for debugging */}
-          {/* {console.log("modal length: " + modalContent.length)}
-          {console.log("count: " + document.getElementById('clear-count').textContent)} */}
-          {/* {(parseInt(document.getElementById('clear-count').textContent) === modalContent.length) ? console.log('reached') : console.log('not yet')} */}
 
           <div className="Modal-Wd">
             <div className="InnerModal-Wd">
@@ -183,15 +169,9 @@ function App(props) {
                 disable="true"
 
                 />
-                {/* {(parseInt(document.getElementById('clear-count').textContent) === modalContent.length) ? (
-                  (document.getElementById('cls-btn').style.opacity = 1) &&
-                  (document.getElementById('cls-btn').style.pointerEvents = "auto")
-                ) : console.log('not yet')} */}
-              </div>
-            </div>
 
-            
-              
+              </div>
+            </div>           
           </div>
         </div>}
 
