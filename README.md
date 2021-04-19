@@ -1,3 +1,7 @@
+# Description
+
+This is a web application that simulates a priority waitlist that could be used (or modified to be used) in any type of business including hospitals, restaurants, etc. I built the front-end using React and CSS, and the back-end using Express.js and PostgreSQL.
+
 # Getting started
 
 1. Make sure you have postgreSQL installed on your machine.
