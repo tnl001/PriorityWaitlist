@@ -20,7 +20,7 @@ const port = process.env.PORT || 5555;
 
 // Steps to connect the server to the database
 let database;
-const databaseURL = "postgres://postgres:tai1234@localhost:5432/postgres";
+const databaseURL = "[INSERT YOUR DATABASE URL HERE]";
 const connectClient = new pg.Client(databaseURL);
 connectClient.connect();
 
